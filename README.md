@@ -17,7 +17,7 @@ Why the data integrity check was introduced which causes incompatibility with ot
 Because Arduino is slow, really slow even at @500000 baud. And no data integrity checking so random flashing may occure... Increasing serial port speed leads to problems with the LED library as most ATMega are at 16MHz only (for comparision Esp8266 is at 80/160MHz). For over 200leds and RGB channel we have merely ~20 frames. For RGBW is even worse. The only advantage of Arduinos is logic at 5V. For Esp8266 level shifter 3.3V to 5V may be required. You can find example of simply and efficient one here: <a href="https://hyperhdr.blogspot.com/2020/12/my-build-log-using-sk6812-rgbw-led.html#chapter3">Level shifter for 3.3V logic level</a><br/><br/>Rpi is very powerful device but for the SK6812 and WS2812b protocol timing of transmission is crucial. It's hard to maintain it in the multitasking environment.<br/><br/>WLED is a brilliant app and it's preffered solution in most cases. But sometimes Wifi is not an option: there is a problem with the signal strenght/stability caused by EM interference or obstacles which results in disturbing effects from the LED strip.You can also try https://github.com/awawa-dev/HyperSerialWLED if you don't want to abandon WLED benefits or you are looking for a version for ESP32.<br/><br/>Arduino: 250 RGB leds, 100 Hz output from HyperHDR, real output for the LED strip is around 20Hz<br/>With such slow hardware driver you don't even need 30FPS from the grabber really:<br/>
 <img src='https://i.postimg.cc/1PD541LP/p100.jpg' border='0' alt='p100' width="320"/><br/>
 With HyperSerialEsp8266 you can have over 100Hz refresh rate for 250 RGB and over 80HZ for 250 RGBW LED strips.<br/>
-<img src="https://i.postimg.cc/bvCwBYHJ/250-rgbw-latch0.jpg" width="320"/><img src="https://i.postimg.cc/Kz18SXJ5/250-rgb-latch0.jpg" width="320"/><br/>
+<img src="https://i.postimg.cc/bvCwBYHJ/250-rgbw-latch0.jpg" width="320"/>&nbsp;<img src="https://i.postimg.cc/Kz18SXJ5/250-rgb-latch0.jpg" width="320"/><br/>
 Stats are send to serial port monitor where there is no data incoming. You can read it with any serial port client. This driver is not hiding any information from you.
 
 # Flashing
@@ -27,18 +27,20 @@ If the first LED in the strip should be enabled or set to black is your choice.<
 For the RGBW firmware the white channel is automatically calculated and R,G,B channels are corrected.<br/><br/>
 
 Using esphome-flasher:<br/>
-<img src="https://i.postimg.cc/X7yb9FQs/flash.jpg" width="480"/><br/>
+<img src="https://i.postimg.cc/X7yb9FQs/flash.jpg" width="640"/><br/>
 
 # Usage in HyperHDR
+
 Watch out for latch time, don't go above 15ms as it will affect communication performance.<br/>
-<img src="https://i.postimg.cc/7h0KZxnn/usage.jpg" width="480"/><br/>
+<img src="https://i.postimg.cc/7h0KZxnn/usage.jpg" width="640"/><br/>
 
 # Result
-RGB<br/>
-<img src="https://i.postimg.cc/sjrQQ11Y/250-rgb-setup.jpg" width="480"/><br/><br/>
 
-RGBW<br/>
-<img src="https://i.postimg.cc/KZL38tcc/250-rgbw-setup.jpg" width="480"/><br/><br/>
+RGB (250 leds, 100Hz)<br/>
+<img src="https://i.postimg.cc/sjrQQ11Y/250-rgb-setup.jpg" width="640"/><br/><br/>
+
+RGBW (250 leds, 100Hz)<br/>
+<img src="https://i.postimg.cc/KZL38tcc/250-rgbw-setup.jpg" width="640"/><br/><br/>
 
 # Compiling
 
