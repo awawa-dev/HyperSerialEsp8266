@@ -46,7 +46,8 @@ enum class AwaProtocol {
 };
 
 // static data buffer for the loop
-uint8_t     buffer[4096];
+#define MAX_BUFFER 2048
+uint8_t     buffer[MAX_BUFFER];
 AwaProtocol state = AwaProtocol::HEADER_A;
 uint8_t     CRC = 0;
 uint16_t    count = 0;
@@ -64,13 +65,50 @@ uint8_t     bChannel[256];
 RgbColor    inputColor;
 #endif
 
+// stats
+unsigned long     stat_start  = 0;
+uint16_t          stat_good = 0;
+uint16_t          stat_frames  = 0;
+uint16_t          stat_final_good = 0;
+uint16_t          stat_final_frames  = 0;
+
 void readSerialData()
 {
+    unsigned long curTime = millis();
     uint16_t bufferPointer = 0;
-    uint16_t internalIndex = min(Serial.available(), 4096);
+    uint16_t internalIndex = min(Serial.available(), MAX_BUFFER);
 
     if (internalIndex > 0)
         internalIndex = Serial.readBytes(buffer, internalIndex);
+
+    // stats
+    if (internalIndex > 0 && curTime - stat_start > 1000)
+    {
+       if (stat_frames > 0)
+       {
+          stat_final_good = stat_good;
+          stat_final_frames = stat_frames;
+       }
+       
+       stat_start  = curTime;
+       stat_good   = 0;
+       stat_frames = 0;
+    }
+    else if (curTime - stat_start > 5000)
+    {
+       stat_start  = curTime;
+       stat_good   = 0;
+       stat_frames = 0;
+       
+       Serial.write("Stats for the last full frame.\n");
+       Serial.write("Frames per second: ");
+       Serial.print(stat_final_frames);     
+       Serial.write("\nGood frames: ");
+       Serial.print(stat_final_good); 
+       Serial.write("\nBad frames:  ");
+       Serial.print(stat_final_frames - stat_final_good); 
+       Serial.write("\n-------------------------\n");
+    }
 
     while (bufferPointer < internalIndex)
     {
@@ -92,6 +130,7 @@ void readSerialData()
             break;
 
         case AwaProtocol::HEADER_HI:
+            stat_frames++;
             currentPixel = 0;
             count = input * 0x100;
             CRC = input;
@@ -168,7 +207,11 @@ void readSerialData()
             break;
 
         case AwaProtocol::FLETCHER2:
-            if (input == fletcher2) strip->Show();
+            if (input == fletcher2) 
+            {
+              stat_good++;;
+              strip->Show();              
+            }
             state = AwaProtocol::HEADER_A;
             break;
         }
@@ -197,11 +240,26 @@ void setup()
 {
     // Init serial port
     Serial.begin(serialSpeed);
-
-    //  Init NeoPixelBus
+    Serial.setTimeout(50);  
+    Serial.setRxBufferSize(2048);
+  
+    // Display config
+    Serial.write("\nWelcome!\nAwa driver.\n");    
+    #ifdef THIS_IS_RGBW
+      Serial.write("Color mode: RGBW\n");
+    #else
+      Serial.write("Color mode: RGB\n");
+    #endif
+    if (skipFirstLed)
+      Serial.write("First LED: disabled\n");
+    else
+      Serial.write("First LED: enabled\n");
+    
+    // Init NeoPixelBus
     Init(pixelCount);
     strip->Begin();
 
+    // Prepare calibration for RGBW
     #ifdef THIS_IS_RGBW
         // prepare 
         for (int i = 0; i < 256; i++)
@@ -209,7 +267,7 @@ void setup()
             // color calibration
             uint32_t rCorrection = 0xB0 * (uint32_t)i; // adjust red   -> white in 0-0xFF range
             uint32_t gCorrection = 0xB0 * (uint32_t)i; // adjust green -> white in 0-0xFF range
-            uint32_t bCorrection = 0x80 * (uint32_t)i; // adjust blue  -> white in 0-0xFF range
+            uint32_t bCorrection = 0x70 * (uint32_t)i; // adjust blue  -> white in 0-0xFF range
 
             rCorrection /= 0xFF;
             gCorrection /= 0xFF;

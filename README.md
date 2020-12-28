@@ -10,13 +10,15 @@ RGB to RGBW conversion is calibrated for the neutral white channel BTF SK6812 bu
 
 # Data integrity check
 
-Why the data integrity check was introduced which causes incompatibility with other software? Because at 2Mb speed many chip-makers allow few percent error in the transmission. And we do not want to have any distracting flashes. Broken frames are abandon without showing them. At 100Hz for 250 leds approximately 2-3% of the frames are broken.
+Why the data integrity check was introduced which causes incompatibility with other software? Because at 2Mb speed many chip-makers allow few percent error in the transmission. And we do not want to have any distracting flashes. Broken frames are abandon without showing them. At 100Hz for 250 leds approximately 1-5% of the frames are broken.
 
 # Why not Arduino, Raspberry Pi or WLED
 
 Because Arduino is slow, really slow even at @500000 baud. And no data integrity checking so random flashing may occure... Increasing serial port speed leads to problems with the LED library as most ATMega are at 16MHz only (for comparision Esp8266 is at 80/160MHz). For over 200leds and RGB channel we have merely ~20 frames. For RGBW is even worse. The only advantage of Arduinos is logic at 5V. For Esp8266 level shifter 3.3V to 5V may be required. You can find example of simply and efficient one here: <a href="https://hyperhdr.blogspot.com/2020/12/my-build-log-using-sk6812-rgbw-led.html#chapter3">Level shifter for 3.3V logic level</a><br/><br/>Rpi is very powerful device but for the SK6812 and WS2812b protocol timing of transmission is crucial. It's hard to maintain it in the multitasking environment.<br/><br/>WLED is a brilliant app and it's preffered solution in most cases. But sometimes Wifi is not an option: there is a problem with the signal strenght/stability caused by EM interference or obstacles which results in disturbing effects from the LED strip.You can also try https://github.com/awawa-dev/HyperSerialWLED if you don't want to abandon WLED benefits or you are looking for a version for ESP32.<br/><br/>Arduino: 250 RGB leds, 100 Hz output from HyperHDR, real output for the LED strip is around 20Hz<br/>With such slow hardware driver you don't even need 30FPS from the grabber really:<br/>
 <a href='https://postimg.cc/MX44nsjy' target='_blank'><img src='https://i.postimg.cc/MX44nsjy/p100.jpg' border='0' alt='p100'/></a><br/><br/>
-With HyperSerialEsp8266 you can have over 100Hz refresh rate for RGB and over 60HZ for RGBW for very long high density LED strips.
+With HyperSerialEsp8266 you can have over 100Hz refresh rate for 250 RGB and over 80HZ for 250 RGBW LED strips.<br/>
+<img src="https://i.postimg.cc/tJsmykxP/250-rgb-latch0.jpg"/><img src="https://i.postimg.cc/QCvYM7Qz/250-rgbw-latch0.jpg"/><br/>
+Stats are send to serial port monitor where there is no data incoming. You can read it with any serial port client. This driver is not hiding any information from you.
 
 # Flashing
 For <b>RGBW LED strip</b> like RGBW SK6812 choose: <i>HyperSerialEsp8266.ino.d1_mini_RGBW_FIRSTLED_xxxxxx.bin</i><br/>
@@ -33,13 +35,10 @@ Watch out for latch time, don't go above 15ms as it will affect communication pe
 
 # Result
 RGB<br/>
-<img src="https://i.postimg.cc/ZZC1n82S/final-RGB-at-2mb.jpg"/><br/><br/>
+<img src="https://i.postimg.cc/sjrQQ11Y/250-rgb-setup.jpg"/><br/><br/>
 
 RGBW<br/>
-<img src="https://i.postimg.cc/vQxVDSrn/final-RGBW-at-2mb.jpg"/><br/><br/>
-
-RGBW (latch 15ms)<br/>
-<img src="https://i.postimg.cc/3hLs3SL1/final-at-2mb.jpg"/><br/>
+<img src="https://i.postimg.cc/KZL38tcc/250-rgbw-setup.jpg"/><br/><br/>
 
 # Compiling
 
