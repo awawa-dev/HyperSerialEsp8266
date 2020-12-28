@@ -264,9 +264,9 @@ void setup()
         for (int i = 0; i < 256; i++)
         {
             // color calibration
-            uint32_t rCorrection = 0xB0 * (uint32_t)i; // adjust red   -> white in 0-0xFF range
-            uint32_t gCorrection = 0xB0 * (uint32_t)i; // adjust green -> white in 0-0xFF range
-            uint32_t bCorrection = 0x70 * (uint32_t)i; // adjust blue  -> white in 0-0xFF range
+            uint32_t rCorrection = 0 * (uint32_t)i; // adjust red   -> white in 0-0xFF range
+            uint32_t gCorrection = 0 * (uint32_t)i; // adjust green -> white in 0-0xFF range
+            uint32_t bCorrection = 0 * (uint32_t)i; // adjust blue  -> white in 0-0xFF range
 
             rCorrection /= 0xFF;
             gCorrection /= 0xFF;
