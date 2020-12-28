@@ -244,16 +244,16 @@ void setup()
     Serial.setRxBufferSize(2048);
   
     // Display config
-    Serial.write("\nWelcome!\nAwa driver.\n");    
+    Serial.write("\r\nWelcome!\r\nAwa driver.\r\n");    
     #ifdef THIS_IS_RGBW
-      Serial.write("Color mode: RGBW\n");
+      Serial.write("Color mode: RGBW\r\n");
     #else
-      Serial.write("Color mode: RGB\n");
+      Serial.write("Color mode: RGB\r\n");
     #endif
     if (skipFirstLed)
-      Serial.write("First LED: disabled\n");
+      Serial.write("First LED: disabled\r\n");
     else
-      Serial.write("First LED: enabled\n");
+      Serial.write("First LED: enabled\r\n");
     
     // Init NeoPixelBus
     Init(pixelCount);
