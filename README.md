@@ -18,7 +18,7 @@ Because Arduino is slow, really slow even at @500000 baud. And no data integrity
 <img src='https://i.postimg.cc/1PD541LP/p100.jpg' border='0' alt='p100' width="320"/><br/><br/>
 With HyperSerialEsp8266 you can have over 100Hz refresh rate for 250 RGB and over 80HZ for 250 RGBW LED strips.<br/>
 <img src="https://i.postimg.cc/bvCwBYHJ/250-rgbw-latch0.jpg" width="320"/>&nbsp;<img src="https://i.postimg.cc/Kz18SXJ5/250-rgb-latch0.jpg" width="320"/><br/><br/>
-Stats are send to serial port monitor where there is no data incoming. You can read it with any serial port client. This driver is not hiding any information from you.
+Stats are send to serial port monitor when there is no data incoming. You can read it with any serial port client. This driver is not hiding any information from you.
 
 # Flashing
 For <b>RGBW LED strip</b> like RGBW SK6812 choose: <i>HyperSerialEsp8266.ino.d1_mini_RGBW_FIRSTLED_xxxxxx.bin</i><br/>
