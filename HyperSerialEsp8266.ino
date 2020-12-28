@@ -100,14 +100,14 @@ void readSerialData()
        stat_good   = 0;
        stat_frames = 0;
        
-       Serial.write("Stats for the last full frame.\n");
+       Serial.write("Stats for the last full frame.\r\n");
        Serial.write("Frames per second: ");
        Serial.print(stat_final_frames);     
-       Serial.write("\nGood frames: ");
+       Serial.write("\r\nGood frames: ");
        Serial.print(stat_final_good); 
-       Serial.write("\nBad frames:  ");
+       Serial.write("\r\nBad frames:  ");
        Serial.print(stat_final_frames - stat_final_good); 
-       Serial.write("\n-------------------------\n");
+       Serial.write("\r\n-------------------------\r\n");
     }
 
     while (bufferPointer < internalIndex)
