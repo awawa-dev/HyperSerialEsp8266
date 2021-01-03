@@ -30,8 +30,9 @@ Using esphome-flasher:<br/>
 <img src="https://i.postimg.cc/X7yb9FQs/flash.jpg" width="640"/><br/>
 
 # Usage in HyperHDR
-
+<br/>
 Watch out for latch time, don't go above 15ms as it will affect communication performance.<br/>
+Switch to "Expert" level settings in the top-right corner to have followwing options visible.<br/><br/>
 <img src="https://i.postimg.cc/7h0KZxnn/usage.jpg" width="640"/><br/>
 
 # Result
