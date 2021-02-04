@@ -21,9 +21,9 @@ With HyperSerialEsp8266 you can have over 100Hz refresh rate for 250 RGB and ove
 Statistics are sent to serial port monitor when there is no data incoming. You can read it with any serial port client. This driver is not hiding any information from you.
 
 # Flashing
-For <b>RGBW LED strip</b> like RGBW SK6812 NEUTRAL white choose: <i>HyperSerialEsp8266.ino.d1_mini_RGBW_FIRSTLED_xxxxxx.bin</i><br/>
-For <b>RGBW LED strip</b> like RGBW SK6812 COLD white choose: <i>HyperSerialEsp8266.ino.d1_mini_RGBW_COLD_WHITE_FIRSTLED_xxxxxx.bin</i><br/>
-For <b>RGB LED strip</b> like WS8212b or RGB SK6812 variant choose: <i>HyperSerialEsp8266.ino.d1_mini_RGB_FIRSTLED_xxxxxx.bin</i><br/><br/>
+For <b>RGBW LED strip</b> like RGBW SK6812 NEUTRAL white choose: <i>HyperSerialEsp8266.ino.d1_mini_RGBW_FIRSTLED_xxxxxx.bin</i><br/><br/>
+For <b>RGBW LED strip</b> like RGBW SK6812 COLD white choose: <i>HyperSerialEsp8266.ino.d1_mini_RGBW_COLD_WHITE_FIRSTLED_xxxxxx.bin</i><br/><br/>
+For <b>RGB LED strip</b> like WS8212b or RGB SK6812 variant choose: <i>HyperSerialEsp8266.ino.d1_mini_RGB_FIRSTLED_xxxxxx.bin</i><br/><br/><br/>
 If the first LED in the strip should be enabled or set to black is your choice.<br/>
 For the RGBW firmware the white channel is automatically calculated and R,G,B channels are corrected.<br/><br/>
 
