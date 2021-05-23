@@ -71,6 +71,17 @@ uint16_t          stat_good = 0;
 uint16_t          stat_frames  = 0;
 uint16_t          stat_final_good = 0;
 uint16_t          stat_final_frames  = 0;
+bool              wantShow = false;
+
+void ShowMe()
+{
+    if (wantShow = true && strip->CanShow())
+    {
+        stat_good++;;
+        wantShow = false;
+        strip->Show();
+    }  
+}
 
 void readSerialData()
 {
@@ -109,6 +120,9 @@ void readSerialData()
        Serial.print(stat_final_frames - stat_final_good); 
        Serial.write("\r\n-------------------------\r\n");
     }
+
+    if (state == AwaProtocol::HEADER_A)
+        ShowMe();
 
     while (bufferPointer < internalIndex)
     {
@@ -209,8 +223,8 @@ void readSerialData()
         case AwaProtocol::FLETCHER2:
             if (input == fletcher2) 
             {
-              stat_good++;;
-              strip->Show();              
+                wantShow = true;
+                ShowMe();        
             }
             state = AwaProtocol::HEADER_A;
             break;
