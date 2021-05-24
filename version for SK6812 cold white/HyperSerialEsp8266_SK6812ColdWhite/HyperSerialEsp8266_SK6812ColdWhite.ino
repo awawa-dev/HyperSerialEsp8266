@@ -73,9 +73,9 @@ uint16_t          stat_final_good = 0;
 uint16_t          stat_final_frames  = 0;
 bool              wantShow = false;
 
-void ShowMe()
+inline void ShowMe()
 {
-    if (wantShow = true && strip->CanShow())
+    if (wantShow == true && strip->CanShow())
     {
         stat_good++;;
         wantShow = false;
@@ -95,7 +95,7 @@ void readSerialData()
     // stats
     if (internalIndex > 0 && curTime - stat_start > 1000)
     {
-       if (stat_frames > 0)
+       if (stat_frames > 0 && stat_frames >= stat_good )
        {
           stat_final_good = stat_good;
           stat_final_frames = stat_frames;
@@ -111,7 +111,7 @@ void readSerialData()
        stat_good   = 0;
        stat_frames = 0;
        
-       Serial.write("Stats for the last full frame.\r\n");
+       Serial.write("HyperSerialEsp8266 version 4.\r\nStatistics for the last full 1 second cycle.\r\n");
        Serial.write("Frames per second: ");
        Serial.print(stat_final_frames);     
        Serial.write("\r\nGood frames: ");
@@ -233,7 +233,7 @@ void readSerialData()
 }
 
 #ifdef THIS_IS_RGBW
-void setStripPixel(uint16_t pix, RgbwColor& inputColor)
+inline void setStripPixel(uint16_t pix, RgbwColor& inputColor)
 {
     if (pix < pixelCount)
     {
@@ -241,7 +241,7 @@ void setStripPixel(uint16_t pix, RgbwColor& inputColor)
     }
 }
 #else
-void setStripPixel(uint16_t pix, RgbColor& inputColor)
+inline void setStripPixel(uint16_t pix, RgbColor& inputColor)
 {
     if (pix < pixelCount)
     {
@@ -275,8 +275,8 @@ void setup()
 
     // Prepare calibration for RGBW
     #ifdef THIS_IS_RGBW
-        // prepare 
-        for (int i = 0; i < 256; i++)
+        // prepare LUT calibration table, cold white is much better than "neutral" white
+        for (uint32_t i = 0; i < 256; i++)
         {
             // color calibration
             uint32_t rCorrection = 0xA0 * (uint32_t)i; // adjust red   -> white in 0-0xFF range
@@ -293,7 +293,7 @@ void setup()
         }
     #endif  
 
-    // Say ambilight like "Hello" to the world
+    // Say "Hello" to the world using first led
     for (int i = 0; i < 9; i++)
     {
         if (i < 3)
