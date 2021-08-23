@@ -3,23 +3,17 @@
 /////////////////////////          CONFIG SECTION STARTS               /////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#define   THIS_IS_RGBW             // RGBW or 4 byte RGB APA102, otherwise comment it for 3 byte RGB
 bool      skipFirstLed = true;     // if set the first led in the strip will be set to black (for level shifters)
 int       serialSpeed = 2000000;   // serial port speed
-
+                                   // data output on the hardware SPI pins: MOSI for data, and MSCLK or CLK for clock
+                                   
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////            CONFIG SECTION ENDS               /////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 int       pixelCount  = 16; // This is dynamic, don't change it
 
-#ifdef THIS_IS_RGBW
-  #define   LED_TYPE    DotStarLbgrFeature
-#else
-  #define   LED_TYPE    DotStarBgrFeature
-#endif
-
-NeoPixelBus<LED_TYPE, DotStarMethod>* strip = NULL;
+NeoPixelBus<DotStarBgrFeature, DotStarSpiMethod>* strip = NULL;
 
 void Init(int count)
 {
@@ -27,7 +21,7 @@ void Init(int count)
         delete strip;
         
     pixelCount = count;
-    strip = new NeoPixelBus<LED_TYPE, DotStarMethod>(pixelCount);
+    strip = new NeoPixelBus<DotStarBgrFeature, DotStarSpiMethod>(pixelCount);
 }
 
 enum class AwaProtocol {
@@ -54,15 +48,7 @@ uint16_t    currentPixel = 0;
 uint16_t    fletcher1 = 0;
 uint16_t    fletcher2 = 0;
 
-#ifdef THIS_IS_RGBW
-RgbwColor   inputColor;
-uint8_t     rChannel[256];
-uint8_t     gChannel[256];
-uint8_t     bChannel[256];
-
-#else
 RgbColor    inputColor;
-#endif
 
 // stats
 unsigned long     stat_start  = 0;
@@ -185,27 +171,14 @@ void readSerialData()
             break;
 
         case AwaProtocol::BLUE:
-            inputColor.B = input;  
-            
-            #ifdef THIS_IS_RGBW
-                inputColor.W = min(rChannel[inputColor.R],
-                                   min(gChannel[inputColor.G],
-                                       bChannel[inputColor.B]));
-                inputColor.R -= rChannel[inputColor.W];
-                inputColor.G -= gChannel[inputColor.W];
-                inputColor.B -= bChannel[inputColor.W];
-            #endif            
+            inputColor.B = input;
                     
             fletcher1 = (fletcher1 + (uint16_t)input) % 255;
             fletcher2 = (fletcher2 + fletcher1) % 255;
 
             if (currentPixel == 0 && skipFirstLed)
             {
-                #ifdef THIS_IS_RGBW
-                strip->SetPixelColor(currentPixel++, RgbwColor(0, 0, 0, 0));
-                #else
                 strip->SetPixelColor(currentPixel++, RgbColor(0, 0, 0));
-                #endif
             }
             else
                 setStripPixel(currentPixel++, inputColor);
@@ -231,15 +204,6 @@ void readSerialData()
     }
 }
 
-#ifdef THIS_IS_RGBW
-inline void setStripPixel(uint16_t pix, RgbwColor& inputColor)
-{
-    if (pix < pixelCount)
-    {
-        strip->SetPixelColor(pix, inputColor);
-    }
-}
-#else
 inline void setStripPixel(uint16_t pix, RgbColor& inputColor)
 {
     if (pix < pixelCount)
@@ -247,7 +211,6 @@ inline void setStripPixel(uint16_t pix, RgbColor& inputColor)
         strip->SetPixelColor(pix, inputColor);
     }
 }
-#endif
 
 void setup()
 {
@@ -258,11 +221,9 @@ void setup()
   
     // Display config
     Serial.write("\r\nWelcome!\r\nAwa driver.\r\n");    
-    #ifdef THIS_IS_RGBW
-      Serial.write("Color mode: RGBW\r\n");
-    #else
-      Serial.write("Color mode: RGB\r\n");
-    #endif
+
+    Serial.write("Color mode: RGB\r\n");
+
     if (skipFirstLed)
       Serial.write("First LED: disabled\r\n");
     else
@@ -270,27 +231,7 @@ void setup()
     
     // Init NeoPixelBus
     Init(pixelCount);
-    strip->Begin();
-
-    // Prepare calibration for RGBW
-    #ifdef THIS_IS_RGBW
-        // prepare LUT calibration table
-        for (uint32_t i = 0; i < 256; i++)
-        {
-            // color calibration
-            uint32_t rCorrection = 0 * (uint32_t)i; // adjust red   -> white in 0-0xFF range
-            uint32_t gCorrection = 0 * (uint32_t)i; // adjust green -> white in 0-0xFF range
-            uint32_t bCorrection = 0 * (uint32_t)i; // adjust blue  -> white in 0-0xFF range
-
-            rCorrection /= 0xFF;
-            gCorrection /= 0xFF;
-            bCorrection /= 0xFF;
-
-            rChannel[i] = (uint8_t)rCorrection;
-            gChannel[i] = (uint8_t)gCorrection;
-            bChannel[i] = (uint8_t)bCorrection;
-        }
-    #endif  
+    strip->Begin();   
 
     // Say "Hello" to the world using first led
     for (int i = 0; i < 9; i++)
