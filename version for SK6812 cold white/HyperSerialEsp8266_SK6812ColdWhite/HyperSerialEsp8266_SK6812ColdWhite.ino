@@ -4,14 +4,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #define   THIS_IS_RGBW             // RGBW SK6812, otherwise comment it
-bool      skipFirstLed = false;     // if set the first led in the strip will be set to black (for level shifters)
+bool      skipFirstLed = false;    // if set the first led in the strip will be set to black (for level shifters)
 int       serialSpeed = 2000000;   // serial port speed
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////            CONFIG SECTION ENDS               /////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int       pixelCount  = 16; // This is dynamic, don't change it
+int       pixelCount  = 0;        // This is dynamic, don't change it
 
 #ifdef THIS_IS_RGBW
   #define   LED_TYPE    NeoGrbwFeature  
@@ -29,6 +29,7 @@ void Init(int count)
         
     pixelCount = count;
     strip = new NeoPixelBus<LED_TYPE, NeoEsp8266Uart1800KbpsMethod>(pixelCount);
+    strip->Begin();
 }
 
 enum class AwaProtocol {
@@ -75,7 +76,7 @@ bool              wantShow = false;
 
 inline void ShowMe()
 {
-    if (wantShow == true && strip->CanShow())
+    if (wantShow == true && strip != NULL && strip->CanShow())
     {
         stat_good++;;
         wantShow = false;
@@ -258,7 +259,7 @@ void setup()
     Serial.setRxBufferSize(2048);
   
     // Display config
-    Serial.write("\r\nWelcome!\r\nAwa driver.\r\n");    
+    Serial.write("\r\nWelcome!\r\nAwa driver 5.\r\n");    
     #ifdef THIS_IS_RGBW
       Serial.write("Color mode: RGBW\r\n");
     #else
@@ -268,10 +269,6 @@ void setup()
       Serial.write("First LED: disabled\r\n");
     else
       Serial.write("First LED: enabled\r\n");
-    
-    // Init NeoPixelBus
-    Init(pixelCount);
-    strip->Begin();
 
     // Prepare calibration for RGBW
     #ifdef THIS_IS_RGBW
@@ -291,25 +288,7 @@ void setup()
             gChannel[i] = (uint8_t)gCorrection;
             bChannel[i] = (uint8_t)bCorrection;
         }
-    #endif  
-
-    // Say "Hello" to the world using first led
-    for (int i = 0; i < 9; i++)
-    {
-        if (i < 3)
-            strip->SetPixelColor(0, RgbColor(((i + 1) * 80) % 255, 0, 0));
-        else if (i < 6)
-            strip->SetPixelColor(0, RgbColor(0, ((6 - i) * 80) % 255, 0));
-        else
-            strip->SetPixelColor(0, RgbColor(0, 0, ((i - 5) * 80) % 255));
-
-        strip->Show();
-        delay(200);
-    }
-
-    // Clear it
-    strip->SetPixelColor(0, RgbColor(0, 0, 0));
-    strip->Show();
+    #endif
 }
 
 void loop()
