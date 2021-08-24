@@ -3,17 +3,21 @@
 /////////////////////////          CONFIG SECTION STARTS               /////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-bool      skipFirstLed = true;     // if set the first led in the strip will be set to black (for level shifters)
+bool      skipFirstLed = false;    // if set the first led in the strip will be set to black (for level shifters)
 int       serialSpeed = 2000000;   // serial port speed
                                    // data output on the hardware SPI pins: MOSI for data, and MSCLK or CLK for clock
-                                   
+#define   is_WS2801                // for WS2801 use NeoPixelBus<NeoRgbFeature, NeoWs2801Spi2MhzMethod>, otherwise comment it with //, choose NeoxxxFeature that fits you
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////            CONFIG SECTION ENDS               /////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int       pixelCount  = 16; // This is dynamic, don't change it
+int       pixelCount  = 0;        // This is dynamic, don't change it
 
-NeoPixelBus<DotStarBgrFeature, DotStarSpiMethod>* strip = NULL;
+#ifdef is_WS2801
+      NeoPixelBus<NeoRbgFeature, NeoWs2801Spi2MhzMethod>* strip = NULL;
+#else
+      NeoPixelBus<DotStarBgrFeature, DotStarSpiMethod>* strip = NULL;
+#endif
 
 void Init(int count)
 {
@@ -21,7 +25,12 @@ void Init(int count)
         delete strip;
         
     pixelCount = count;
-    strip = new NeoPixelBus<DotStarBgrFeature, DotStarSpiMethod>(pixelCount);
+    #ifdef is_WS2801
+          strip = new NeoPixelBus<NeoRbgFeature, NeoWs2801Spi2MhzMethod>(pixelCount);
+    #else
+          strip = new NeoPixelBus<DotStarBgrFeature, DotStarSpiMethod>(pixelCount);
+    #endif
+    strip->Begin();
 }
 
 enum class AwaProtocol {
@@ -60,7 +69,7 @@ bool              wantShow = false;
 
 inline void ShowMe()
 {
-    if (wantShow == true && strip->CanShow())
+    if (wantShow == true && strip != NULL && strip->CanShow())
     {
         stat_good++;;
         wantShow = false;
@@ -147,7 +156,13 @@ void readSerialData()
         case AwaProtocol::HEADER_CRC:
             if (CRC == input)
             {
-                if (count+1 != pixelCount) Init(count+1);
+                if (count+1 != pixelCount)
+                {
+                   if (strip != NULL)
+                       ESP.restart();
+                   else
+                       Init(count+1);
+                }
                 state = AwaProtocol::RED;
             }
             else
@@ -206,7 +221,7 @@ void readSerialData()
 
 inline void setStripPixel(uint16_t pix, RgbColor& inputColor)
 {
-    if (pix < pixelCount)
+    if (pix < pixelCount && strip != NULL)
     {
         strip->SetPixelColor(pix, inputColor);
     }
@@ -227,29 +242,7 @@ void setup()
     if (skipFirstLed)
       Serial.write("First LED: disabled\r\n");
     else
-      Serial.write("First LED: enabled\r\n");
-    
-    // Init NeoPixelBus
-    Init(pixelCount);
-    strip->Begin();   
-
-    // Say "Hello" to the world using first led
-    for (int i = 0; i < 9; i++)
-    {
-        if (i < 3)
-            strip->SetPixelColor(0, RgbColor(((i + 1) * 80) % 255, 0, 0));
-        else if (i < 6)
-            strip->SetPixelColor(0, RgbColor(0, ((6 - i) * 80) % 255, 0));
-        else
-            strip->SetPixelColor(0, RgbColor(0, 0, ((i - 5) * 80) % 255));
-
-        strip->Show();
-        delay(200);
-    }
-
-    // Clear it
-    strip->SetPixelColor(0, RgbColor(0, 0, 0));
-    strip->Show();
+      Serial.write("First LED: enabled\r\n");    
 }
 
 void loop()

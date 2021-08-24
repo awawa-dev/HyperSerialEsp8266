@@ -23,7 +23,8 @@ Statistics are sent to serial port monitor when there is no data incoming. You c
 # Flashing
 For <b>RGBW LED strip</b> like RGBW SK6812 NEUTRAL white choose: <i>HyperSerialEsp8266.ino.d1_mini_RGBW_FIRSTLED_xxxxxx.bin</i><br/><br/>
 For <b>RGBW LED strip</b> like RGBW SK6812 COLD white choose: <i>HyperSerialEsp8266.ino.d1_mini_RGBW_COLD_WHITE_FIRSTLED_xxxxxx.bin</i><br/><br/>
-For <b>RGB LED strip</b> like WS8212b or RGB SK6812 variant choose: <i>HyperSerialEsp8266.ino.d1_mini_RGB_FIRSTLED_xxxxxx.bin</i><br/><br/><br/>
+For <b>RGB LED strip</b> like WS8212b or RGB SK6812 variant choose: <i>HyperSerialEsp8266.ino.d1_mini_RGB_FIRSTLED_xxxxxx.bin</i><br/><br/>
+For <b>SPI driven RGB LED strip</b> like WS2801 or APA102/SK9812 you must build the image yourself that fits you. Especially for WS2801 there is a lot of options related to color order.<br/><br/>
 If the first LED in the strip should be enabled or set to black is your choice.<br/>
 For the RGBW firmware the white channel is automatically calculated and R,G,B channels are corrected.<br/><br/>
 
@@ -56,6 +57,10 @@ Serial port speed:<br/>
 <i>int       serialSpeed = 2000000;</i><br/><br/>
 Don't change LED's count as it is dynamic.<br/>
 
+# Pinout
+
+For non-SPI LED strip data pin is GPIO2 (usually D4).  
+For SPI LED strip is: GPIO13 (MOSI, usually D7) and GPIO14 (SCLK/CLOCK, usually D5).  
 
 # Disclaimer
 You use it on your own risk.<br/>Don't touch these firmwares if you don't know how to put the device in the programming mode if something goes wrong.<br/>
