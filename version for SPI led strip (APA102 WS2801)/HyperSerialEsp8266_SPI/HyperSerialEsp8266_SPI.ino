@@ -105,7 +105,7 @@ void readSerialData()
        stat_good   = 0;
        stat_frames = 0;
        
-       Serial.write("HyperSerialEsp8266 version 4.\r\nStatistics for the last full 1 second cycle.\r\n");
+       Serial.write("HyperSerialEsp8266 version 5 SPI.\r\nStatistics for the last full 1 second cycle.\r\n");
        Serial.write("Frames per second: ");
        Serial.print(stat_final_frames);     
        Serial.write("\r\nGood frames: ");
@@ -235,7 +235,7 @@ void setup()
     Serial.setRxBufferSize(2048);
   
     // Display config
-    Serial.write("\r\nWelcome!\r\nAwa driver.\r\n");    
+    Serial.write("\r\nWelcome!\r\nAwa driver 5 SPI.\r\n");    
 
     Serial.write("Color mode: RGB\r\n");
 
