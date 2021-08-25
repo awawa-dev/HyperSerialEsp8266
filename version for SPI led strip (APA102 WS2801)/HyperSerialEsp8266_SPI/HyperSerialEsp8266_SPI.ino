@@ -156,13 +156,7 @@ void readSerialData()
         case AwaProtocol::HEADER_CRC:
             if (CRC == input)
             {
-                if (count+1 != pixelCount)
-                {
-                   if (strip != NULL)
-                       ESP.restart();
-                   else
-                       Init(count+1);
-                }
+                if (count+1 != pixelCount) Init(count+1);
                 state = AwaProtocol::RED;
             }
             else

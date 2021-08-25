@@ -4,7 +4,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #define   THIS_IS_RGBW             // RGBW SK6812, otherwise comment it
-bool      skipFirstLed = false;    // if set the first led in the strip will be set to black (for level shifters)
+bool      skipFirstLed = true;     // if set the first led in the strip will be set to black (for level shifters)
 int       serialSpeed = 2000000;   // serial port speed
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -225,7 +225,7 @@ void readSerialData()
             if (input == fletcher2) 
             {
                 wantShow = true;
-                ShowMe();            
+                ShowMe();        
             }
             state = AwaProtocol::HEADER_A;
             break;
@@ -261,7 +261,7 @@ void setup()
     // Display config
     Serial.write("\r\nWelcome!\r\nAwa driver 5.\r\n");    
     #ifdef THIS_IS_RGBW
-      Serial.write("Color mode: RGBW cold\r\n");
+      Serial.write("Color mode: RGBW neutral\r\n");
     #else
       Serial.write("Color mode: RGB\r\n");
     #endif
@@ -272,13 +272,13 @@ void setup()
 
     // Prepare calibration for RGBW
     #ifdef THIS_IS_RGBW
-        // prepare LUT calibration table, cold white is much better than "neutral" white
+        // prepare LUT calibration table, neutral white is in fact yellow
         for (uint32_t i = 0; i < 256; i++)
         {
             // color calibration
-            uint32_t rCorrection = 0xA0 * (uint32_t)i; // adjust red   -> white in 0-0xFF range
-            uint32_t gCorrection = 0xA0 * (uint32_t)i; // adjust green -> white in 0-0xFF range
-            uint32_t bCorrection = 0xA0 * (uint32_t)i; // adjust blue  -> white in 0-0xFF range
+            uint32_t rCorrection = 0xB0 * (uint32_t)i; // adjust red   -> white in 0-0xFF range
+            uint32_t gCorrection = 0xB0 * (uint32_t)i; // adjust green -> white in 0-0xFF range
+            uint32_t bCorrection = 0x70 * (uint32_t)i; // adjust blue  -> white in 0-0xFF range
 
             rCorrection /= 0xFF;
             gCorrection /= 0xFF;
