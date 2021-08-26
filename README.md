@@ -52,9 +52,9 @@ Using esphome-flasher:
 # Usage in HyperHDR
   
 Watch out for latch time, don't go above 15ms as it will affect communication performance.  
-Switch to "Expert" level settings in the top-right corner to have following options visible.  
+Switch to "Expert" level settings to have all following options visible.  
   
-<img src="https://i.postimg.cc/7h0KZxnn/usage.jpg" width="640"/>
+![obraz](https://user-images.githubusercontent.com/69086569/130987180-f12fb88e-850a-4fc3-8ea8-3579d900059a.png)
   
 # Result
   
