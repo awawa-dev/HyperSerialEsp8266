@@ -9,6 +9,13 @@ There is also my new fork named HyperSerialWLED available with the support for t
 Tested with SK6812 RGBW and cheap 1.75$ noname clone of Wemos ESP8266 d1 mini CH340G. The data output is on the GPIO2 (D4 pin for Wemos mini d1), just like WLED for example. Should work with 3-channel RGB led system like WS8212b also.  
   
 RGB to RGBW conversion is calibrated for the neutral white channel BTF SK6812 but it can be easily changed (for cool and warm temperature) in the code. Search for "color calibration". In HyperHDR use "1.5" gamma for red, blue and green for best effect in the "Image Processing" tab.
+
+| LED strip / Device             | HyperSerialEsp8266 |
+|--------------------------------|:------------------:|
+| SK6812 cold white              |        yes         |
+| SK6812 neutral white           |        yes         |
+| WS281x                         |        yes         |
+| SPI (APA102, SK9812, HD107...) |        yes         |
   
 # Data integrity check
   
