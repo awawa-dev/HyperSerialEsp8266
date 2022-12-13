@@ -31,7 +31,8 @@ WLED is a brilliant app and it's preffered solution in most cases. But sometimes
   
 **Arduino: 250 RGB leds, 500000 baud, 100 Hz output from HyperHDR, real output for the LED strip is around 20Hz.**  
 **With such slow hardware driver you don't even need 30FPS from the grabber really:**  
-<img src='https://i.postimg.cc/1PD541LP/p100.jpg' border='0' alt='p100' width="320"/>
+
+<img src='https://user-images.githubusercontent.com/69086569/207443059-0ef8bc71-0a5d-4faa-bab7-f313d1cb6ed6.png' border='0' alt='p100' width="320"/>
   
   
 With HyperSerialEsp8266 you can have over 100Hz refresh rate for 250 RGB and over 80HZ for 250 RGBW LED strips.  
@@ -61,17 +62,28 @@ Using esphome-flasher:
   
 # Usage in HyperHDR
   
-Make sure you set "Refresh time" to zero, "Baudrate" to 2000000 and enabled HyperHDR's AWA protocol.  
-Enabling "White channel calibration" is optional, if you want to fine tune the white channel balance of your sk6812 RGBW LED strip.  
+Set `Refresh time` to zero, `Baudrate` to 2000000 and you enabled `HyperHDR's AWA protocol`.  
+Enabling `White channel calibration` is optional, if you want to fine tune the white channel balance of your sk6812 RGBW LED strip.  
+`ESP8266/ESP32 handshake` could help you to properly initialize the ESP device and enables statistics available in the logs (you must stop the LED device first to get them).  
+
+![obraz](https://user-images.githubusercontent.com/69086569/207109594-0493fe58-3530-46bb-a0a3-31a110475ed6.png)
   
-![obraz](https://user-images.githubusercontent.com/69086569/192894824-7c58b497-480d-468a-8014-fb03859e3977.png)
-  
-# Result
-  
-RGB (250 leds, 100Hz)  
+# Benchmarks
+
+
+**Refresh rate depending on requested refresh rate/LED strip length**:
+| RGBW LED strip / Device                        | WeMos D1 Mini Pro (CP2104)<br>HyperSerialEsp8266 v8 |
+|------------------------------------------------|-----------------------------------------|
+| 300LEDs<br>Refresh rate/continues output=100Hz |                  71-75                 |
+| 600LEDs<br>Refresh rate/continues output=60Hz  |                  34-35                 |
+| 900LEDs<br>Refresh rate/continues output=40Hz  |                  23                   |
+
+
+**Logic level analyzer, RGB (250 leds, 100Hz)**  
 <img src="https://i.postimg.cc/sjrQQ11Y/250-rgb-setup.jpg" width="640"/>  
-  
-RGBW (250 leds, 100Hz)  
+
+
+**Logic level analyzer, RGBW (250 leds, 100Hz)**  
 <img src="https://i.postimg.cc/KZL38tcc/250-rgbw-setup.jpg" width="640"/>  
   
 # Compiling
@@ -79,7 +91,9 @@ RGBW (250 leds, 100Hz)
 Currently we use PlatformIO to compile the project. Install [Visual Studio Code](https://code.visualstudio.com/) and add [PlatformIO plugin](https://platformio.org/).
 This environment will take care of everything and compile the firmware for you.
 
-But there is also an alternative and an easier way. Just fork the project and enable its Github Action. Use the online editor to make changes to the ```platformio.ini``` file, for example, and save it. Github Action will compile new firmware automatically in the Artifacts archive. It has never been so easy!
+But there is also an alternative and an easier way. Just fork the project and enable its Github Action. Use the online editor to make changes to the ```platformio.ini``` file, for example change default pin-outs/speed or enable multi-segments support, and save it. Github Action will compile new firmware automatically in the Artifacts archive. It has never been so easy!
+
+Tutorial: https://github.com/awawa-dev/HyperSerialEsp8266/wiki
   
 # Pinout
   
