@@ -62,12 +62,19 @@ Using esphome-flasher:
   
 # Usage in HyperHDR
   
-Make sure you set "Refresh time" to zero, "Baudrate" to 2000000 and enabled HyperHDR's AWA protocol.  
-Enabling "White channel calibration" is optional, if you want to fine tune the white channel balance of your sk6812 RGBW LED strip.  
+Set `Refresh time` to zero, `Baudrate` to 2000000 and you enabled `HyperHDR's AWA protocol`.  
+Enabling `White channel calibration` is optional, if you want to fine tune the white channel balance of your sk6812 RGBW LED strip.  
+`ESP8266/ESP32 handshake` could help you to properly initialize the ESP device and enables statistics available in the logs (you must stop the LED device first to get them).  
+
+![obraz](https://user-images.githubusercontent.com/69086569/207109594-0493fe58-3530-46bb-a0a3-31a110475ed6.png)
   
-![obraz](https://user-images.githubusercontent.com/69086569/192894824-7c58b497-480d-468a-8014-fb03859e3977.png)
-  
-# Result
+# Benchmarks
+
+| RGBW LED strip / Device                        | WeMos D1 Mini Pro (CP2104)<br>HyperSerialEsp8266 v8 |
+|------------------------------------------------|-----------------------------------------|
+| 300LEDs<br>Refresh rate/continues output=100Hz |                  71-75                 |
+| 600LEDs<br>Refresh rate/continues output=60Hz  |                  34-35                 |
+| 900LEDs<br>Refresh rate/continues output=40Hz  |                  23                   |
   
 RGB (250 leds, 100Hz)  
 <img src="https://i.postimg.cc/sjrQQ11Y/250-rgb-setup.jpg" width="640"/>  
