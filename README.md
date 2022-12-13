@@ -83,7 +83,7 @@ Enabling `White channel calibration` is optional, if you want to fine tune the w
 <img src="https://i.postimg.cc/sjrQQ11Y/250-rgb-setup.jpg" width="640"/>  
 
 
-**RGBW (250 leds, 100Hz)**  
+**Logic level analyzer, RGBW (250 leds, 100Hz)**  
 <img src="https://i.postimg.cc/KZL38tcc/250-rgbw-setup.jpg" width="640"/>  
   
 # Compiling
