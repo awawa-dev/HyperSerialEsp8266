@@ -70,16 +70,17 @@ Enabling `White channel calibration` is optional, if you want to fine tune the w
   
 # Benchmarks
 
+**Refresh rate depending on requested refresh rate/LED strip length**:
 | RGBW LED strip / Device                        | WeMos D1 Mini Pro (CP2104)<br>HyperSerialEsp8266 v8 |
 |------------------------------------------------|-----------------------------------------|
 | 300LEDs<br>Refresh rate/continues output=100Hz |                  71-75                 |
 | 600LEDs<br>Refresh rate/continues output=60Hz  |                  34-35                 |
 | 900LEDs<br>Refresh rate/continues output=40Hz  |                  23                   |
   
-RGB (250 leds, 100Hz)  
+**Logic level analyzer, RGB (250 leds, 100Hz)**  
 <img src="https://i.postimg.cc/sjrQQ11Y/250-rgb-setup.jpg" width="640"/>  
   
-RGBW (250 leds, 100Hz)  
+**RGBW (250 leds, 100Hz)**  
 <img src="https://i.postimg.cc/KZL38tcc/250-rgbw-setup.jpg" width="640"/>  
   
 # Compiling
