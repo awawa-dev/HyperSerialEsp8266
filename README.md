@@ -31,7 +31,8 @@ WLED is a brilliant app and it's preffered solution in most cases. But sometimes
   
 **Arduino: 250 RGB leds, 500000 baud, 100 Hz output from HyperHDR, real output for the LED strip is around 20Hz.**  
 **With such slow hardware driver you don't even need 30FPS from the grabber really:**  
-<img src='https://i.postimg.cc/1PD541LP/p100.jpg' border='0' alt='p100' width="320"/>
+
+<img src='https://user-images.githubusercontent.com/69086569/207443059-0ef8bc71-0a5d-4faa-bab7-f313d1cb6ed6.png' border='0' alt='p100' width="320"/>
   
   
 With HyperSerialEsp8266 you can have over 100Hz refresh rate for 250 RGB and over 80HZ for 250 RGBW LED strips.  
