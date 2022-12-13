@@ -80,7 +80,9 @@ RGBW (250 leds, 100Hz)
 Currently we use PlatformIO to compile the project. Install [Visual Studio Code](https://code.visualstudio.com/) and add [PlatformIO plugin](https://platformio.org/).
 This environment will take care of everything and compile the firmware for you.
 
-But there is also an alternative and an easier way. Just fork the project and enable its Github Action. Use the online editor to make changes to the ```platformio.ini``` file, for example, and save it. Github Action will compile new firmware automatically in the Artifacts archive. It has never been so easy!
+But there is also an alternative and an easier way. Just fork the project and enable its Github Action. Use the online editor to make changes to the ```platformio.ini``` file, for example change default pin-outs/speed or enable multi-segments support, and save it. Github Action will compile new firmware automatically in the Artifacts archive. It has never been so easy!
+
+Tutorial: https://github.com/awawa-dev/HyperSerialEsp8266/wiki
   
 # Pinout
   
