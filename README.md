@@ -2,7 +2,7 @@
   
 Exposes USB high speed serial port at 2Mb baud for driving led strip using NeoPixelBus library. It's intended to replace slow Arduino solutions (level shifter 3.3V to 5v may be required). **Data integrity check (Fletcher's checksum) included in new 'Awa' protocol for HyperHDR. So no more random flashing caused by serial transmission errors.** That option must be checked in HyperHDR to make system works as on the screen below.  
   
-Make sure that your serial chip on the ESP8266 can handle 2Mb speed: for example CP2102 can't as its max speed is 1Mb and you can compile a version for that speed but I think that's not the point, cheap CH340G can do it without any problems.  
+Make sure that your serial chip on the ESP8266 can handle 2Mb speed: for example CP2102 can't as its max speed is 1Mb and you can compile a version for that speed but I think that's not the point, cheap CH340G can do it without any problems. CH9102x also should work for you, even at 4Mb speed.  
   
 There is also my new fork named HyperSerialWLED available with the support for the AWA serial protocol at @2Mb speed for both ESP8266 and ESP32: https://github.com/awawa-dev/HyperSerialWLED Can't guarantee it will work as stable as HyperSerialEsp8266 because WLED has a lot of other things to do in the backgrounds (ex. handling Wifi) and timing control for the serial port could be at danger for larger number of LEDs. But you don't need to abandon all the benefits offered by the WLED which can be a big advantage for some users.  
   
@@ -16,6 +16,13 @@ RGB to RGBW conversion is calibrated for the neutral white channel BTF SK6812 bu
 | SK6812 neutral white           |        yes         |
 | WS281x                         |        yes         |
 | SPI (APA102, SK9812, HD107...) |        yes         |
+
+# Example of supported boards
+
+**Esp8266 Wemos D1 mini (CH340) and Wemos D1 mini pro (CP2104)**  
+<p align="center">
+<img src="https://user-images.githubusercontent.com/69086569/207572306-2b0bd3dd-fcb2-4f0c-8426-64341cbbadbf.png" /><img src="https://user-images.githubusercontent.com/69086569/207572335-9caf2567-2e23-4ee4-85a4-0f2f82676c16.png" />
+</p>
   
 # Data integrity check
   
@@ -89,7 +96,7 @@ Enabling `White channel calibration` is optional, if you want to fine tune the w
 # Compiling
   
 Currently we use PlatformIO to compile the project. Install [Visual Studio Code](https://code.visualstudio.com/) and add [PlatformIO plugin](https://platformio.org/).
-This environment will take care of everything and compile the firmware for you.
+This environment will take care of everything and compile the firmware for you. Low-level LED strip support is provided by the https://github.com/Makuna/NeoPixelBus library.
 
 But there is also an alternative and an easier way. Just fork the project and enable its Github Action. Use the online editor to make changes to the ```platformio.ini``` file, for example change default pin-outs/speed or enable multi-segments support, and save it. Github Action will compile new firmware automatically in the Artifacts archive. It has never been so easy!
 
