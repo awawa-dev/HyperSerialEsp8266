@@ -56,9 +56,9 @@
 #pragma message(VAR_NAME_VALUE(SERIALCOM_SPEED))
 
 #ifdef NEOPIXEL_RGBW
-	#define LED_DRIVER NeoPixelBus<NeoGrbwFeature, NeoEsp8266Uart1800KbpsMethod>
+	#define LED_DRIVER NeoPixelBus<NeoGrbwFeature, NeoEsp8266Uart1Sk6812Method>
 #elif NEOPIXEL_RGB
-	#define LED_DRIVER NeoPixelBus<NeoGrbFeature, NeoEsp8266Uart1800KbpsMethod>
+	#define LED_DRIVER NeoPixelBus<NeoGrbFeature, NeoEsp8266Uart1Ws2812xMethod>
 #elif SPILED_APA102
 	#define LED_DRIVER NeoPixelBus<DotStarBgrFeature, DotStarSpiMethod>
 #elif SPILED_WS2801
