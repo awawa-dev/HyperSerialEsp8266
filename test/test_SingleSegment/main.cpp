@@ -32,7 +32,7 @@
 
 #ifdef NEOPIXEL_RGBW
 	struct RgbwColor
-	{   
+	{
 		uint8_t R;
 		uint8_t G;
 		uint8_t B;
@@ -40,10 +40,10 @@
 	};
 #else
 	struct RgbColor
-	{   
+	{
 		uint8_t R;
 		uint8_t G;
-		uint8_t B;  
+		uint8_t B;
 	};
 #endif
 
@@ -70,8 +70,8 @@ uint8_t bChannel[256];
 
 /**
  * @brief Old calibration procedure
- * 
- * @return void 
+ *
+ * @return void
  */
 void oldCalibration()
 {
@@ -91,11 +91,11 @@ void oldCalibration()
 
 /**
  * @brief Compare old and new calibration result
- * 
- * @return void 
+ *
+ * @return void
  */
 void compareLut()
-{	
+{
 	for (uint32_t i = 0; i < 256; i++)
 	{
 		int w = std::abs(int(wChannel[i]) - int(channelCorrection.white[i]));
@@ -108,8 +108,8 @@ void compareLut()
 
 /**
  * @brief Calculate the calibration table using old and new method and compare the result
- * 
- * @return void 
+ *
+ * @return void
  */
 void CommonTest_OldAndNedCalibrationAlgorithm()
 {
@@ -165,7 +165,7 @@ uint8_t _ledBuffer[TEST_LEDS_NUMBER * 3 + 6 + 7];
 
 /**
  * @brief Mockup Serial class to simulate the real communition
- * 
+ *
  */
 
 class SerialTester
@@ -175,7 +175,7 @@ class SerialTester
 
 	public:
 
-		void createTestFrame(bool _white_channel_calibration, uint8_t _white_channel_limit = 0, 
+		void createTestFrame(bool _white_channel_calibration, uint8_t _white_channel_limit = 0,
 						uint8_t _white_channel_red = 0, uint8_t _white_channel_green = 0,
 						uint8_t _white_channel_blue = 0)
 		{
@@ -183,7 +183,7 @@ class SerialTester
 			_ledBuffer[1] = 'w';
 			_ledBuffer[2] = (_white_channel_calibration) ? 'A' : 'a';
 			_ledBuffer[4] = (TEST_LEDS_NUMBER-1) & 0xff;
-			_ledBuffer[3] = ((TEST_LEDS_NUMBER-1) >> 8) & 0xff;			
+			_ledBuffer[3] = ((TEST_LEDS_NUMBER-1) >> 8) & 0xff;
 			_ledBuffer[5] = _ledBuffer[3] ^ _ledBuffer[4] ^ 0x55;
 
 			uint8_t* writer = &(_ledBuffer[6]);
@@ -212,9 +212,9 @@ class SerialTester
 			}
 			*(writer++) = (uint8_t)fletcher1;
 			*(writer++) = (uint8_t)fletcher2;
-			
+
 			frameSize = (int)(writer - _ledBuffer);
-			sent = 0;			
+			sent = 0;
 		}
 
 
@@ -262,18 +262,18 @@ class SerialTester
 
 		void println(const String &s)
 		{
-			
+
 		}
 } SerialPort;
 
 
 /**
- * @brief Mockup LED driver to verify correctness of the received LEDs color values 
- * 
+ * @brief Mockup LED driver to verify correctness of the received LEDs color values
+ *
  */
 
 class ProtocolTester {
-	int ledCount;	
+	int ledCount;
 	int currentIndex = 0;
 	int lastCount = 0;
 
@@ -302,12 +302,12 @@ class ProtocolTester {
 
 		void Begin()
 		{
-			
+
 		}
 
 		void Begin(int a, int b, int c, int d)
 		{
-			
+
 		}
 
 		int getLastCount()
@@ -317,11 +317,11 @@ class ProtocolTester {
 
 		/**
 		 * @brief Very important: verify LED color, compare it to the origin
-		 * 
-		 * @param indexPixel 
-		 * @param color 
+		 *
+		 * @param indexPixel
+		 * @param color
 		 */
-		#ifdef NEOPIXEL_RGBW		
+		#ifdef NEOPIXEL_RGBW
 			void SetPixelColor(uint16_t indexPixel, RgbwColor color)
 			{
 				TEST_ASSERT_EQUAL_INT_MESSAGE(currentIndex, indexPixel, "Unexpected LED index");
@@ -347,7 +347,7 @@ class ProtocolTester {
 				currentIndex = indexPixel + 1;
 				lastCount = 0;
 			}
-		#else		
+		#else
 			void SetPixelColor(uint16_t indexPixel, RgbColor color)
 			{
 				TEST_ASSERT_EQUAL_INT_MESSAGE(currentIndex, indexPixel, "Unexpected LED index");
@@ -374,7 +374,7 @@ class ProtocolTester {
 
 /**
  * @brief Send RGBW calibration data and verify it all (including proper colors rendering)
- * 
+ *
  */
 void SingleSegmentTest_SendRgbwCalibration()
 {
@@ -383,9 +383,9 @@ void SingleSegmentTest_SendRgbwCalibration()
 	base.queueCurrent = 0;
 	base.queueEnd = 0;
 	statistics.update(0);
-	
+
 	TEST_ASSERT_EQUAL_INT_MESSAGE(0, statistics.getGoodFrames(), "Unexpected initial stats value");
-	
+
 	while(SerialPort.toSend() > 0)
 	{
 		serialTaskHandler();
@@ -399,9 +399,9 @@ void SingleSegmentTest_SendRgbwCalibration()
 	// should not change if the frame doesnt contain calibration data
 	SerialPort.createTestFrame(false);
 	statistics.update(0);
-	
+
 	TEST_ASSERT_EQUAL_INT_MESSAGE(0, statistics.getGoodFrames(), "Unexpected initial stats value");
-	
+
 	while(SerialPort.toSend() > 0)
 	{
 		serialTaskHandler();
@@ -415,9 +415,9 @@ void SingleSegmentTest_SendRgbwCalibration()
 	// last test
 	SerialPort.createTestFrame(true, 255, 128, 128, 128);
 	statistics.update(0);
-	
+
 	TEST_ASSERT_EQUAL_INT_MESSAGE(0, statistics.getGoodFrames(), "Unexpected initial stats value");
-	
+
 	while(SerialPort.toSend() > 0)
 	{
 		serialTaskHandler();
@@ -431,7 +431,7 @@ void SingleSegmentTest_SendRgbwCalibration()
 
 /**
  * @brief Send 100 RGB/RGBW frames and verify it all (including proper colors rendering)
- * 
+ *
  */
 void SingleSegmentTest_Send100Frames()
 {
@@ -442,9 +442,9 @@ void SingleSegmentTest_Send100Frames()
 	{
 		SerialPort.createTestFrame(false);
 		statistics.update(0);
-		
+
 		TEST_ASSERT_EQUAL_INT_MESSAGE(0, statistics.getGoodFrames(), "Unexpected initial stats value");
-		
+
 		while(SerialPort.toSend() > 0)
 		{
 			serialTaskHandler();
@@ -458,7 +458,7 @@ void SingleSegmentTest_Send100Frames()
 
 /**
  * @brief Send 200 RGB/RGBW valid/invalid frames and verify it all (including proper colors rendering)
- * 
+ *
  */
 void SingleSegmentTest_Send200UncertainFrames()
 {
@@ -479,7 +479,7 @@ void SingleSegmentTest_Send200UncertainFrames()
 			backup = _ledBuffer[index];
 			_ledBuffer[index] =  backup ^ 0xfe;
 		}
-		
+
 		TEST_ASSERT_EQUAL_INT_MESSAGE(0, statistics.getGoodFrames(), "Unexpected initial stats value");
 
 		while(SerialPort.toSend() > 0)
@@ -487,7 +487,7 @@ void SingleSegmentTest_Send200UncertainFrames()
 			serialTaskHandler();
 			processData();
 		}
-				
+
 		if (damaged)
 		{
 			char buffer[128];
@@ -514,7 +514,7 @@ void setup()
 {
 	delay(1000);
 	randomSeed(analogRead(0));
-	UNITY_BEGIN();	
+	UNITY_BEGIN();
 	#ifdef NEOPIXEL_RGBW
 		RUN_TEST(CommonTest_OldAndNedCalibrationAlgorithm);
 		RUN_TEST(SingleSegmentTest_SendRgbwCalibration);
