@@ -2,7 +2,7 @@
 *
 *  MIT License
 *
-*  Copyright (c) 2022 awawa-dev
+*  Copyright (c) 2023 awawa-dev
 *
 *  https://github.com/awawa-dev/HyperSerialEsp8266
 *
@@ -69,17 +69,17 @@ class Base
 			{
 				ledStrip1 = new LED_DRIVER(ledsNumber);
 				ledStrip1->Begin();
-			}			
+			}
 		}
 
 		/**
 		 * @brief Check if there is already prepared frame to display
-		 * 
-		 * @return true 
-		 * @return false 
+		 *
+		 * @return true
+		 * @return false
 		 */
 		inline bool hasLateFrameToRender()
-		{			
+		{
 			return readyToRender;
 		}
 
@@ -88,26 +88,26 @@ class Base
 			if (newFrame)
 				readyToRender = true;
 
-			if (readyToRender && 
+			if (readyToRender &&
 				(ledStrip1 != nullptr && ledStrip1->CanShow()))
-			{			
+			{
 				statistics.increaseShow();
 				readyToRender = false;
 
 				// display segments
-				ledStrip1->Show(false);				
+				ledStrip1->Show(false);
 			}
 		}
 
 		inline bool setStripPixel(uint16_t pix, ColorDefinition &inputColor)
 		{
 			if (pix < ledsNumber)
-			{				
-				ledStrip1->SetPixelColor(pix, inputColor);			
+			{
+				ledStrip1->SetPixelColor(pix, inputColor);
 			}
 
 			return (pix + 1 < ledsNumber);
-		}		
+		}
 } base;
 
 #endif

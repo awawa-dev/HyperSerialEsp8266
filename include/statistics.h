@@ -2,7 +2,7 @@
 *
 *  MIT License
 *
-*  Copyright (c) 2022 awawa-dev
+*  Copyright (c) 2023 awawa-dev
 *
 *  https://github.com/awawa-dev/HyperSerialEsp8266
 *
@@ -41,9 +41,9 @@ class
 
 	public:
 		/**
-		 * @brief Get the start time of the current period 
-		 * 
-		 * @return unsigned long 
+		 * @brief Get the start time of the current period
+		 *
+		 * @return unsigned long
 		 */
 		inline unsigned long getStartTime()
 		{
@@ -52,16 +52,16 @@ class
 
 		/**
 		 * @brief Detected new frame
-		 * 
+		 *
 		 */
 		inline void increaseTotal()
-		{		
+		{
 			totalFrames++;
 		}
 
 		/**
 		 * @brief The frame is received and shown
-		 * 
+		 *
 		 */
 		inline void increaseShow()
 		{
@@ -70,27 +70,27 @@ class
 
 		/**
 		 * @brief The frame is received correctly (not yet displayed)
-		 * 
+		 *
 		 */
 		inline void increaseGood()
-		{		
+		{
 			goodFrames++;
 		}
 
 		/**
 		 * @brief Get number of correctly received frames
-		 * 
-		 * @return uint16_t 
+		 *
+		 * @return uint16_t
 		 */
 		inline uint16_t getGoodFrames()
-		{		
+		{
 			return goodFrames;
 		}
 
 		/**
 		 * @brief Period restart, save current statistics ans send them later if there is no incoming communication
-		 * 
-		 * @param currentTime 
+		 *
+		 * @param currentTime
 		 */
 		void update(unsigned long currentTime)
 		{
@@ -109,8 +109,8 @@ class
 
 		/**
 		 * @brief Print last saved statistics to the serial port
-		 * 
-		 * @param curTime 
+		 *
+		 * @param curTime
 		 */
 		void print(unsigned long curTime)
 		{
@@ -118,13 +118,13 @@ class
 			goodFrames = 0;
 			totalFrames = 0;
 			showFrames = 0;
-			
+
 			SerialPort.write("\r\nHyperHDR frames: ");
 			SerialPort.print(finalShowFrames);
 			SerialPort.write(" (FPS), receiv.: ");
-			SerialPort.print(finalTotalFrames);						
+			SerialPort.print(finalTotalFrames);
 			SerialPort.write(", good: ");
-			SerialPort.print(finalGoodFrames);				
+			SerialPort.print(finalGoodFrames);
 			SerialPort.write(", incompl.: ");
 			SerialPort.print(finalTotalFrames - finalGoodFrames);
 			SerialPort.write(", heap: ");
@@ -137,7 +137,7 @@ class
 
 		/**
 		 * @brief Reset statistics
-		 * 
+		 *
 		 */
 		void reset(unsigned long currentTime)
 		{
@@ -146,7 +146,7 @@ class
 			finalShowFrames = 0;
 			finalGoodFrames = 0;
 			finalTotalFrames = 0;
-			
+
 			goodFrames = 0;
 			totalFrames = 0;
 			showFrames = 0;

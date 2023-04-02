@@ -2,7 +2,7 @@
 *
 *  MIT License
 *
-*  Copyright (c) 2022 awawa-dev
+*  Copyright (c) 2023 awawa-dev
 *
 *  https://github.com/awawa-dev/HyperSerialEsp8266
 *
@@ -89,7 +89,7 @@ void setup()
 			#else
 				calibrationConfig.setParamsAndPrepareCalibration(0xFF, 0xB0, 0xB0, 0x70);
 				Serial.println("NeoPixelBus SK6812 neutral GRBW.");
-			#endif			
+			#endif
 			calibrationConfig.printCalibration();
 		#else
 			Serial.println("NeoPixelBus ws281x type (GRB).");

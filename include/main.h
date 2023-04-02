@@ -2,7 +2,7 @@
 *
 *  MIT License
 *
-*  Copyright (c) 2022 awawa-dev
+*  Copyright (c) 2023 awawa-dev
 *
 *  https://github.com/awawa-dev/HyperSerialEsp8266
 *
@@ -38,10 +38,10 @@
 
 /**
  * @brief shandling serial communication
- * 
+ *
  */
 void serialTaskHandler()
-{		
+{
 	uint16_t incomingSize = min(SerialPort.available(), MAX_BUFFER);
 
 	if (incomingSize > 0)
@@ -49,15 +49,15 @@ void serialTaskHandler()
 		SerialPort.read(&(base.buffer[0]), incomingSize);
 		base.queueEnd = incomingSize;
 		base.queueCurrent = 0;
-	}	
+	}
 }
 
 /**
  * @brief process received data on core 0
- * 
+ *
  */
 void processData()
-{	
+{
 	// update and print statistics
 	unsigned long currentTime = millis();
 	unsigned long deltaTime = currentTime - statistics.getStartTime();
@@ -70,7 +70,7 @@ void processData()
 	{
 		frameState.setState(AwaProtocol::HEADER_A);
 		statistics.print(currentTime);
-	}	
+	}
 
 	// render waiting frame if available
 	if (base.hasLateFrameToRender() && frameState.getState() == AwaProtocol::HEADER_A)
@@ -78,19 +78,19 @@ void processData()
 
 	// process received data
 	while (base.queueCurrent != base.queueEnd)
-	{			
+	{
 		byte input = base.buffer[base.queueCurrent++];
 
 		switch (frameState.getState())
 		{
 		case AwaProtocol::HEADER_A:
-			// assume it's protocol version 1, verify it later			
+			// assume it's protocol version 1, verify it later
 			frameState.setProtocolVersion2(false);
-			if (input == 'A')			
+			if (input == 'A')
 				frameState.setState(AwaProtocol::HEADER_w);
 			break;
 
-		case AwaProtocol::HEADER_w:			
+		case AwaProtocol::HEADER_w:
 			if (input == 'w')
 				frameState.setState(AwaProtocol::HEADER_a);
 			else
@@ -111,7 +111,7 @@ void processData()
 			break;
 
 		case AwaProtocol::HEADER_HI:
-			// initialize new frame properties						
+			// initialize new frame properties
 			statistics.increaseTotal();
 			frameState.init(input);
 			frameState.setState(AwaProtocol::HEADER_LO);
@@ -125,7 +125,7 @@ void processData()
 		case AwaProtocol::HEADER_CRC:
 			// verify CRC and create/update LED driver if neccesery
 			if (frameState.getCRC() == input)
-			{				
+			{
 				uint16_t ledSize = frameState.getCount() + 1;
 
 				// sanity check
@@ -146,13 +146,13 @@ void processData()
 					SerialPort.println(HELLO_MESSAGE);
 					statistics.reset(deltaTime);
 				}
-				else					
+				else
 					statistics.print(currentTime);
 
 				frameState.setState(AwaProtocol::HEADER_A);
 			}
-			else							
-				frameState.setState(AwaProtocol::HEADER_A);			
+			else
+				frameState.setState(AwaProtocol::HEADER_A);
 			break;
 
 		case AwaProtocol::RED:
@@ -175,16 +175,16 @@ void processData()
 
 			#ifdef NEOPIXEL_RGBW
 				// calculate RGBW from RGB using provided calibration data
-				frameState.rgb2rgbw();				
+				frameState.rgb2rgbw();
 			#endif
 
 			// set pixel, increase the index and check if it was the last LED color to come
 			if (base.setStripPixel(frameState.getCurrentLedIndex(), frameState.color))
-			{				
+			{
 				frameState.setState(AwaProtocol::RED);
 			}
 			else
-			{				
+			{
 				if (frameState.isProtocolVersion2())
 					frameState.setState(AwaProtocol::VERSION2_GAIN);
 				else
@@ -234,14 +234,14 @@ void processData()
 			if (input == frameState.getFletcher2())
 			{
 				statistics.increaseGood();
-				
+
 				base.renderLeds(true);
 
 				#ifdef NEOPIXEL_RGBW
 					// if received the calibration data, update it now
 					if (frameState.isProtocolVersion2())
 					{
-						frameState.updateIncomingCalibration();						
+						frameState.updateIncomingCalibration();
 					}
 				#endif
 			}
