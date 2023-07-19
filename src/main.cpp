@@ -38,6 +38,9 @@
 #define _XSTR2(x,y) _STR(x) _STR(y)
 #define VAR_NAME_VALUE2(var) #var " = " _XSTR2(var)
 
+#ifdef CLEAR_LEDS
+	#pragma message(VAR_NAME_VALUE(CLEAR_LEDS))
+#endif
 #ifdef NEOPIXEL_RGBW
 	#pragma message(VAR_NAME_VALUE(NEOPIXEL_RGBW))
 #endif
@@ -76,6 +79,18 @@ void setup()
 	Serial.setRxBufferSize(MAX_BUFFER);
 	Serial.begin(SERIALCOM_SPEED);
 	while (!Serial) continue;
+
+#ifdef CLEAR_LEDS
+	LED_DRIVER* _ledStrip = new LED_DRIVER(CLEAR_LEDS);
+	ColorDefinition _black(0);
+	_ledStrip->Begin();
+	for(int i = 0; i < CLEAR_LEDS; i++)
+		_ledStrip->SetPixelColor(i, _black);
+	_ledStrip->Dirty();
+	_ledStrip->Show(false);
+	delay(10);
+	delete _ledStrip;
+#endif
 
 	// Display config
 	Serial.println(HELLO_MESSAGE);
