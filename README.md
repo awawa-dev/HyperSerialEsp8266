@@ -98,7 +98,7 @@ Enabling `White channel calibration` is optional, if you want to fine tune the w
 Currently we use PlatformIO to compile the project. Install [Visual Studio Code](https://code.visualstudio.com/) and add [PlatformIO plugin](https://platformio.org/).
 This environment will take care of everything and compile the firmware for you. Low-level LED strip support is provided by the https://github.com/Makuna/NeoPixelBus library.
 
-But there is also an alternative and an easier way. Just fork the project and enable its Github Action. Use the online editor to make changes to the ```platformio.ini``` file, for example change default pin-outs/speed or enable multi-segments support, and save it. Github Action will compile new firmware automatically in the Artifacts archive. It has never been so easy!
+But there is also an alternative and an easier way. Just fork the project and enable its Github Action. Use the online editor to make changes to the ```platformio.ini``` file and save it. Github Action will compile new firmware automatically in the Artifacts archive. It has never been so easy!
 
 Tutorial: https://github.com/awawa-dev/HyperSerialEsp8266/wiki
   
