@@ -11,7 +11,7 @@ jobs:
   PlatformIO:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4.2.2
     - name: Cache pip
       uses: actions/cache@v3
       with:
@@ -20,7 +20,7 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-pip-
     - name: Cache PlatformIO
-      uses: actions/cache@v3
+      uses: actions/cache@v4.2.3
       with:
         path: ~/.platformio
         key: ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}
@@ -34,18 +34,17 @@ jobs:
         pip install --upgrade platformio
     - name: Run PlatformIO
       run: pio run
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4.6.2
       name: Upload artifacts (commit)
       if: (startsWith(github.event.ref, 'refs/tags') != true)
       with:
         path: |
           .pio/build/*.bin
-
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4.6.2
       name: Upload artifacts (release)
       if: startsWith(github.ref, 'refs/tags/')
       with:
-        name: firmware-release
+        name: release-artifact
         path: |
           .pio/build/*.bin
 
@@ -70,18 +69,19 @@ jobs:
         if: contains(env.VERSION, 'alpha') || contains(env.VERSION, 'beta')
         run: echo "preRelease=true" >> $GITHUB_ENV
 
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4.3.0
         with:
-          name: firmware-release
+          path: artifacts
+          pattern: release-artifact
+          merge-multiple: true
 
       # create draft release and upload artifacts
       - name: Create draft release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2.2.2
         with:
           name: HyperSerialEsp8266 ${{ env.VERSION }}
           tag_name: ${{ env.TAG }}
-          files: |
-            *.bin
+          files: "artifacts/*.bin"
           draft: true
           prerelease: ${{ env.preRelease }}
         env:
