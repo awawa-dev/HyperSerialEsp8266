@@ -63,7 +63,7 @@
 #elif NEOPIXEL_RGB
 	#define LED_DRIVER NeoPixelBus<NeoGrbFeature, NeoEsp8266Uart1Ws2812xMethod>
 #elif SPILED_APA102
-	#define LED_DRIVER NeoPixelBus<DotStarBgrFeature, DotStarSpiMethod>
+	#define LED_DRIVER NeoPixelBus<DotStarLbgrFeature, DotStarSpiMethod>
 #elif SPILED_WS2801
 	#define LED_DRIVER NeoPixelBus<NeoRbgFeature, NeoWs2801Spi2MhzMethod>
 #endif

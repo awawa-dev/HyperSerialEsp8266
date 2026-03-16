@@ -188,7 +188,7 @@ void processData()
 			#ifdef NEOPIXEL_RGBW
 				frameState.color.W = input;
 			#elif defined(SPILED_APA102)
-				frameState.color.Brightness = input;
+				frameState.color.W = input;
 			#endif
 			frameState.addFletcher(input);
 
@@ -213,7 +213,7 @@ void processData()
 			}
 
 			#if defined(SPILED_APA102)
-				frameState.color.Brightness = 0xFF;
+				frameState.color.W = 0xFF;
 			#endif
 
 			#ifdef NEOPIXEL_RGBW
